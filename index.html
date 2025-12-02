@@ -4,16 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Morocco Prayer Times</title>
-    <!-- استدعاء خط جميل من Google Fonts -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 
-        <!-- <script src="https://unpkg.com/axios/dist/axios.min.js"></script> -->
-
-
     <style>
-                /* Reset Basic Settings */
+        /* Reset Basic Settings */
         * {
             margin: 0;
             padding: 0;
@@ -22,7 +19,7 @@
         }
 
         body {
-            /* تدرج لوني مستوحى من المغرب (أحمر غامق إلى أخضر غامق) */
+            /* Moroccan gradient background */
             background: linear-gradient(135deg, #8a0000, #004d25);
             min-height: 100vh;
             display: flex;
@@ -77,7 +74,7 @@
             animation: fadeInUp 1s ease backwards;
         }
 
-        /* تأخير ظهور الكروت بالتتابع */
+        /* Staggered animation delays */
         .card:nth-child(1) { animation-delay: 0.1s; }
         .card:nth-child(2) { animation-delay: 0.2s; }
         .card:nth-child(3) { animation-delay: 0.3s; }
@@ -91,7 +88,7 @@
         }
 
         .card-header {
-            background-color: #c1272d; /* Moroccan Red */
+            background-color: #c1272d;
             color: white;
             padding: 10px;
             font-size: 1.1rem;
@@ -99,7 +96,7 @@
         }
 
         .sunrise-card .card-header {
-            background-color: #d48e00; /* تمييز وقت الشروق بلون مختلف قليلاً */
+            background-color: #d48e00;
         }
 
         .card-body {
@@ -124,13 +121,13 @@
             border-radius: 30px;
             border: none;
             background: white;
-            color: #006233; /* Moroccan Green text */
+            color: #006233;
             font-weight: bold;
             cursor: pointer;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
             outline: none;
             transition: 0.3s;
-            appearance: none; /* إخفاء السهم الافتراضي */
+            appearance: none;
             text-align: center;
             width: 250px;
         }
@@ -151,7 +148,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Responsive fixes for small screens */
+        /* Responsive fixes */
         @media (max-width: 600px) {
             #city-name { font-size: 2.5rem; }
             .cards-container { grid-template-columns: 1fr 1fr; } 
@@ -224,7 +221,6 @@
             </div>
 
             <!-- Isha -->
-            
             <div class="card">
                 <div class="card-header">
                     <span>Isha</span>
@@ -237,89 +233,79 @@
         </div>
 
         <!-- City Selector -->
-        
         <div class="controls">
             <select id="city-select">
-                <!-- <option value="Casablanca">Casablanca</option>
-                <option value="Mohammadia">Mohammadia</option>
-                <option value="Rabat">Rabat</option>
-                <option value="Tangier">Tangier</option>
-                <option value="Marrakesh">Marrakesh</option>
-                <option value="Agadir">Agadir</option>
-                <option value="Fes">Fes</option>
-                <option value="Meknes">Meknes</option>
-                <option value="Oujda">Oujda</option>
-                <option value="Laayoune">Laayoune</option> -->
+                <!-- Options will be added by JavaScript -->
             </select>
         </div>
 
     </div>
-    
-</body>
 
-
+    <!-- Import Axios -->
     <script src="./node_modules/axios/dist/axios.min.js"></script>
 
-
     <script>
+        // List of cities
+        let cities = ["Fes", "Rabat", "Casablanca", "Mohammadia", "Tanger"];
 
-        let cities = ["Fes", "Rabat", "Casablanca", "Mohammadia", "Tanger"]
-
-        for(city of cities){
+        // Fill the select options
+        for(let city of cities){
             const content = `
                 <option value="${city}">${city}</option>
-            `
-            document.getElementById('city-select').innerHTML += content
+            `;
+            document.getElementById('city-select').innerHTML += content;
         }
 
-        document.getElementById('city-select'),addEventListener("change" , function(){
+        // Add Event Listener
+        // FIX: Changed ',' to '.' (was 'select'),addEventListener')
+        document.getElementById('city-select').addEventListener("change", function(){
             let selectedCity = this.value;
-        
+            
+            // Update Title
             document.getElementById('city-name').innerHTML = selectedCity;
-
+            
+            // Fetch Data
             getPrayerTimeByCity(selectedCity);
+        });
 
-            })
-
-
-
+        // Main Function to Fetch Data
         function getPrayerTimeByCity(cityName){
-                let params = {
+            let params = {
                 city: cityName,
                 country: "MA"
-            }
+            };
+            
             axios.get('https://api.aladhan.com/v1/timingsByCity', {
                 params: params
             })
             .then(function (response) {
-                const timings = response.data.data.timings
-                fillTimeOfPriyer('fajr-time',timings.Fajr)
-                fillTimeOfPriyer('sunrise-time',timings.Sunrise)
-                fillTimeOfPriyer('dhuhr-time',timings.Dhuhr)
-                fillTimeOfPriyer('asr-time',timings.Asr)
-                fillTimeOfPriyer('maghrib-time',timings.Maghrib)
-                fillTimeOfPriyer('isha-time',timings.Isha)
+                const timings = response.data.data.timings;
+                fillTimeOfPriyer('fajr-time', timings.Fajr);
+                fillTimeOfPriyer('sunrise-time', timings.Sunrise);
+                fillTimeOfPriyer('dhuhr-time', timings.Dhuhr);
+                fillTimeOfPriyer('asr-time', timings.Asr);
+                fillTimeOfPriyer('maghrib-time', timings.Maghrib);
+                fillTimeOfPriyer('isha-time', timings.Isha);
 
-                const readableDate = response.data.data.date.readable
-                const weekday = response.data.data.date.hijri.weekday.en 
-                document.getElementById('date').innerHTML = `${weekday} ${readableDate}`
+                const readableDate = response.data.data.date.readable;
+                const weekday = response.data.data.date.hijri.weekday.en;
+                document.getElementById('date').innerHTML = `${weekday} ${readableDate}`;
             })
             .catch(function (error) {
                 console.log(error);
-            })
+            });
         }
 
-        // getPrayerTimeByCity("Fes")
-
-        
-
-        function fillTimeOfPriyer(id,time){
-            document.getElementById(id).innerHTML = time
+        // Helper function to fill HTML
+        function fillTimeOfPriyer(id, time){
+            document.getElementById(id).innerHTML = time;
         }
 
-         getPrayerTimeByCity("Casablanca");
+        // Default city on load
+        getPrayerTimeByCity("Casablanca");
+        // Update the select box to show Casablanca selected
+        document.getElementById('city-select').value = "Casablanca";
+
     </script>
-
-
-
+</body>
 </html>
