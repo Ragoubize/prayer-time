@@ -2,7 +2,7 @@
 
 A beautiful, responsive web application that displays daily prayer times for major Moroccan cities. This project was built to practice interacting with RESTful APIs using **JavaScript** and **Axios**.
 
-![Project Screenshot](./screenshot.png)
+![Project Screenshot](./screen.png)
 <!-- 👆 If you have a screenshot, place it in your folder and name it 'screenshot.png', otherwise delete this line -->
 
 ## 🚀 About The Project
